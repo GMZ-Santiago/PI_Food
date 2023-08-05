@@ -1,0 +1,38 @@
+/* LandingPage.module.css */
+.landingContainer {
+    background-image: url("../../assets/background-image.jpg"); /* Ruta real de la imagen de fondo */
+    background-size: cover;
+    background-position: center;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: white;
+  }
+  
+  .landingContainer h1 {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+  }
+  
+  .landingContainer p {
+    font-size: 1.5rem;
+    margin-bottom: 2rem;
+  }
+  
+  .exploreButton {
+    background-color: #ff5722;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1.2rem;
+    text-decoration: none;
+    transition: background-color 0.3s ease-in-out;
+  }
+  
+  .exploreButton:hover {
+    background-color: #ff7043;
+  }
+  
