@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import styles from "./Card.module.css";
 
 const Card = ({ id, name, image, dietsName }) => {
- 
   return (
     <div className={styles.container}>
       <Link className={styles.url} to={`/recipes/detail/${id}`}>
@@ -16,7 +15,7 @@ const Card = ({ id, name, image, dietsName }) => {
             {Array.isArray(dietsName) &&
               dietsName.map((diet, index) => (
                 <div key={index} className={styles.diet}>
-             {diet}
+                  {diet}
                 </div>
               ))}
           </div>
