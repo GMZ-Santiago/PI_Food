@@ -1,6 +1,13 @@
 /* Detail.module.css */
 
-/* Estilos generales */
+/* Reset some default styling */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Main container */
 .bigContainer {
   display: flex;
   justify-content: center;
@@ -9,57 +16,125 @@
 }
 
 .container {
-  width: 80%;
-  background-color: #f8f8f8;
-  border-radius: 8px;
-  padding: 20px;
+  width: 100%;
+  max-width: 800px;
+  background-color: #ffffff;
+  border-radius: 10px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
 }
 
+/* Close button */
+.closeBtnContainer {
+  position: relative;
+}
+
+.closeBtn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: transparent;
+  border: none;
+  font-size: 24px;
+  color: #333;
+  cursor: pointer;
+  transition: color 0.3s;
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+.closeBtn:hover {
+  color: #f44336;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Main content */
 .main {
+  position: relative;
   display: flex;
   flex-direction: column;
+  padding: 20px;
 }
 
-/* Estilos para la imagen */
+
+/* Main content */
+.main {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+}
+
+/* Title and Image block */
+.title {
+  font-size: 1.8rem;
+  margin-bottom: 10px;
+}
+
 .image {
-  max-width: 100%;
-  border-radius: 8px;
+  width: 100%;
+  max-height: 400px;
+  object-fit: cover;
+  border-radius: 10px;
   margin-bottom: 20px;
 }
 
-/* Estilos para el título y la puntuación */
-.title h2 {
-  margin: 0;
-}
-
+/* HealthScore block */
 .hScore {
-  margin-top: 10px;
-  font-style: italic;
+  display: flex;
+  align-items: center;
+  font-size: 1rem;
+  margin-bottom: 20px;
 }
 
-/* Estilos para los pasos de la receta */
-.subTitle {
-  margin: 20px 0;
+.hScore ins {
   font-weight: bold;
+  margin-right: 5px;
 }
 
-/* Estilos para los tipos de dieta */
+/* Summary block */
+.summary {
+  font-size: 1rem;
+  margin-bottom: 20px;
+}
+
+/* Steps block */
 .subTitle {
-  margin: 20px 0;
-  font-weight: bold;
+  font-size: 1.2rem;
+  margin-bottom: 10px;
 }
 
+ol {
+  padding-left: 20px;
+  margin-bottom: 20px;
+}
+
+li {
+  margin-bottom: 10px;
+}
+
+/* Diets block */
 .dietsTags {
   display: flex;
   flex-wrap: wrap;
+  margin-bottom: 20px;
 }
 
 .diet {
-  background-color: #e0e0e0;
-  color: #333;
-  padding: 4px 8px;
-  border-radius: 4px;
-  margin-right: 10px;
-  margin-bottom: 10px;
+  background-color: #f44336;
+  color: #ffffff;
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 0.8rem;
+  margin-right: 5px;
+  margin-bottom: 5px;
 }

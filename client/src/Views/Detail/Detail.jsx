@@ -34,25 +34,27 @@ const Detail = () => {
   // Renderizar el componente
   return (
     <div className={style.bigContainer}>
-      {Object.keys(recipeDetail).length === 0 ? (
-        <div className={style.loadContainer}>
-          <span className={style.loader}></span>
-        </div>
-      ) : (
-        <div className={style.container}>
-          {/* Botón para regresar a la lista de recetas */}
+  {Object.keys(recipeDetail).length === 0 ? (
+    <div className={style.loadContainer}>
+      <span className={style.loader}></span>
+    </div>
+  ) : (
+    <div className={style.container}>
+      <div className={style.main}>
+        {/* Botón para regresar a la lista de recetas */}
+        <div className={style.closeBtnContainer}>
           <Link to={"/recipes"}>
             <button className={style.closeBtn}>X</button>
           </Link>
-          <div className={style.main}>
-            {/* Bloque de imagen de la receta */}
-            <div className={style.block}>
-              <img
-                className={style.image}
-                src={recipeDetail?.image}
-                alt={recipeDetail?.name}
-              />
-            </div>
+        </div>
+        {/* Bloque de imagen de la receta */}
+        <div className={style.block}>
+          <img
+            className={style.image}
+            src={recipeDetail?.image}
+            alt={recipeDetail?.name}
+          />
+        </div>
             {/* Bloque de información de la receta */}
             <div className={style.block}>
               <div className={style.info}>
