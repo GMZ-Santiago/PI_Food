@@ -16,9 +16,9 @@ function App() {
   return (
     <div className="App">
       {location.pathname !== "/" && <NavBar />}
-      {shouldRenderSearchBar && <SearchBar />} {/* Condiciona la renderización */}
+      {shouldRenderSearchBar && <SearchBar />}
       <Route exact path="/" component={Landing} />
-      <Route exact path="/detail" component={Detail} />
+      <Route exact path="/recipes/detail/:id" component={Detail} /> {/* Ruta para la vista de detalle */}
       <Route exact path="/create" component={CreateRecipe} />
       <Route path="/recipes" render={() => <RecipeCards />} />
     </div>

@@ -10,10 +10,12 @@ import {
   ORDER_BY_HS,
   NEXT_PAGE,
   PREV_PAGE,
+  // CHANGE_PAGE,
   HANDLE_PAGE,
   RESET_RECIPES,
   RESET_FILTERS,
   CLEAN_DETAIL,
+  
 } from "../redux/actions";
 
 const initialState = {
@@ -134,6 +136,12 @@ const reducer = (state = initialState, actions) => {
         numPag: state.numPag - 1,
       };
     }
+    // case CHANGE_PAGE: {
+    //   return {
+    //     ...state,
+    //     numPag: payload
+    //   }
+    // }
 
     case HANDLE_PAGE: {
       return {

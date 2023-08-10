@@ -1,28 +1,29 @@
-import style from "./Card.module.css";
-import {Link} from "react-router-dom";
+import React from "react";
+import { Link } from "react-router-dom";
+import styles from "./Card.module.css";
 
-
-const Card = ({id, name, image, dietsName}) => {
-
-    return(
-        <div className={style.container}>
-            <Link className={style.linkfeo} to={`/recipes/detail/${id}`}>
-            <div className={style.main}>
-                <img className={style.image} src={image} alt={name}/>
-                <div className={style.info}>
-                    <h1 className={style.tittle}>{name}</h1>
-                    <div className={style.diets}>
-                    {   dietsName.map((diet) => {
-                            return( 
-                                <div key={diet} className={style.diet}>{diet}</div>
-                        )})
-                    }
-                    </div>
-                </div>
-            </div>
-            </Link>
+const Card = ({ id, name, image, dietsName }) => {
+ 
+  return (
+    <div className={styles.container}>
+      <Link className={styles.url} to={`/recipes/detail/${id}`}>
+        <div className={styles.imageContainer}>
+          <img className={styles.image} src={image} alt={name} />
         </div>
-    )
-}
+        <div className={styles.info}>
+          <h2 className={styles.title}>{name}</h2>
+          <div className={styles.diets}>
+            {Array.isArray(dietsName) &&
+              dietsName.map((diet, index) => (
+                <div key={index} className={styles.diet}>
+             {diet}
+                </div>
+              ))}
+          </div>
+        </div>
+      </Link>
+    </div>
+  );
+};
 
-export default Card
+export default Card;

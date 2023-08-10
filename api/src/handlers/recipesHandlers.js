@@ -27,7 +27,7 @@ const postRecipeHandler = async (req, res) => {
     try {
         await postRecipeController(req, res);
     } catch (error) {
-        res.status(500).json({error: "An error occurred while creating the recipe"});
+        res.status(500).json({error: "Ha ocurrido un error al crear la receta."});
     }
 }
 

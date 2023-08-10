@@ -6,22 +6,30 @@ const API_URL = `https://api.spoonacular.com/recipes`;
 const { Op } = require("sequelize");
 
 const getRecipeById = async (id) => {
-    if (isNaN(+id)) {
-      const recetaId = await Recipe.findByPk(id, {include: [{model: Diets, through:{attributes:[]}}]})
-    return recetaId
-    } else {
+  if (isNaN(+id)) {
+    const recetaId = await Recipe.findByPk(id, {
+      include: [{ model: Diets, through: { attributes: [] } }],
+    });
+    return recetaId ? formatRecipe(recetaId) : null;
+  } else {
       try {
         const response = await axios.get(`https://api.spoonacular.com/recipes/${id}/information?apiKey=${API_KEY}`);
         const recetaId = {
           id: response.data.id,
-          title: response.data.title,
+          name: response.data.title,
           image: response.data.image,
           summary: response.data.summary,
           healthScore: response.data.healthScore,
-          analyzedInstructions: response.data.analyzedInstructions[0].steps,
+          steps: response.data.analyzedInstructions[0]?.steps.map((element) => {
+            return {
+              number: element.number,
+              step: element.step,
+            }
+          }),
           TypeDiets: response.data.diets,
           created: false   
         }
+
         return recetaId
       } catch (error) {
         return { error: `No existe la receta con ID: ${id}` };
@@ -32,12 +40,20 @@ const getRecipeById = async (id) => {
 const formatRecipe = (recipe) => {
   return {
     id: recipe.id,
-    name: recipe.name,
+    name: recipe.title,
     image: recipe.image,
     healthScore: recipe.healthScore,
     summary: recipe.summary.replace(/(&nbsp;|<([^>]+)>)/gi, ""),
     dietsName: recipe.diets,
-    steps: recipe.steps,
+    steps: recipe.analyzedInstructions[0]?.steps.map((element) => {
+      return {
+          number: element.number,
+          step: element.step
+      }
+  }),
+  vegetarian: recipe.vegetarian,
+  vegan: recipe.vegan,
+  glutenFree: recipe.glutenFree
   };
 };
 
@@ -84,7 +100,7 @@ const postRecipeController = async (req, res) => {
       !typeDiets ||
       !dietsName
     ) {
-      throw new Error("All fields are required for validation.");
+      throw new Error("Completar los campos obligatorios para la validación.");
     }
 
     const newRecipe = await Recipe.create({
@@ -98,7 +114,7 @@ const postRecipeController = async (req, res) => {
 
     const selectedDiets = await Diets.findAll({ where: { id: typeDiets } });
     if (!selectedDiets.length) {
-      throw new Error("No diets found with the provided IDs");
+      throw new Error("No se encontraron dietas con las IDs proporcionadas");
     }
 
     await newRecipe.addDiets(selectedDiets);
@@ -109,14 +125,14 @@ const postRecipeController = async (req, res) => {
 
     res.status(200).json(formatRecipe(resultRecipe));
   } catch (error) {
-    if (error.message === "No diets found with the provided IDs") {
+    if (error.message === "No se encontraron dietas con las IDs proporcionadas") {
       res.status(400).json({ error: error.message });
-    } else if (error.message === "All fields are required for validation.") {
+    } else if (error.message === "Completar los campos obligatorios para la validación.") {
       res.status(404).json({ error: error.message });
     } else {
       res
         .status(500)
-        .json({ error: "An error occurred while creating the recipe" });
+        .json({ error: "Ha ocurrido un error al crear la receta" });
     }
   }
 };

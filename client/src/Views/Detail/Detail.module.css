@@ -1,0 +1,65 @@
+/* Detail.module.css */
+
+/* Estilos generales */
+.bigContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+.container {
+  width: 80%;
+  background-color: #f8f8f8;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.main {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Estilos para la imagen */
+.image {
+  max-width: 100%;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+/* Estilos para el título y la puntuación */
+.title h2 {
+  margin: 0;
+}
+
+.hScore {
+  margin-top: 10px;
+  font-style: italic;
+}
+
+/* Estilos para los pasos de la receta */
+.subTitle {
+  margin: 20px 0;
+  font-weight: bold;
+}
+
+/* Estilos para los tipos de dieta */
+.subTitle {
+  margin: 20px 0;
+  font-weight: bold;
+}
+
+.dietsTags {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.diet {
+  background-color: #e0e0e0;
+  color: #333;
+  padding: 4px 8px;
+  border-radius: 4px;
+  margin-right: 10px;
+  margin-bottom: 10px;
+}

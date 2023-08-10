@@ -1,204 +1,224 @@
-import React, { useState } from "react";
-import styles from "./CreateRecipe.module.css"
+import { useDispatch, useSelector } from "react-redux";
+import style from "./CreateRecipe.module.css";
+import { useEffect, useState } from "react";
+import { getTypeDiets, postRecipes } from "../../redux/actions";
+import validations from "./validations";
 
 const CreateRecipe = () => {
-  const [form, setForm] = useState({
-    nombre: "",
-    resumen: "",
-    indiceSalud: "",
-    pasos: "",
-    imagen: null,
-    dietas: "",
+  const dispatch = useDispatch();
+
+  const [errors, setErrors] = useState({});
+  const [recipe, setRecipe] = useState({
+    name: "",
+    summary: "",
+    healthScore: 0,
+    steps: [{ number: 1, step: "" }],
+    image: "",
+    typeDiets: [],
+    dietsName: [],
   });
 
-  const [errors, setErrors] = useState({
-    nombre: "",
-    resumen: "",
-    indiceSalud: "",
-    pasos: "",
-    imagen: "",
-    dietas: "",
-  });
+  const allDiets = useSelector((state) => state.allDiets);
 
-  const changeHandler = (event) => {
-    const { name, value, files } = event.target;
+  useEffect(() => {
+    if (allDiets.length === 0) {
+      dispatch(getTypeDiets());
+    }
+  }, [allDiets.length, dispatch]);
 
-    if (files) {
-      setForm({ ...form, [name]: files[0] });
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setRecipe((prevRecipe) => ({
+      ...prevRecipe,
+      [name]: value,
+    }));
+    setErrors(
+      validations({
+        ...recipe,
+        [name]: value,
+      })
+    );
+  };
+
+  const handleDiets = (event) => {
+    const dietId = event.target.value;
+    const dietName = allDiets.find((diet) => diet.id === +dietId)?.name;
+
+    if (!dietName) return;
+
+    const isDietChecked = recipe.dietsName.includes(dietName);
+
+    if (isDietChecked) {
+      const updatedDietsId = recipe.typeDiets.filter((item) => item !== dietId);
+      const updatedDietsName = recipe.dietsName.filter((item) => item !== dietName);
+      setRecipe({
+        ...recipe,
+        typeDiets: updatedDietsId,
+        dietsName: updatedDietsName,
+      });
     } else {
-      setForm({ ...form, [name]: value });
+      setRecipe({
+        ...recipe,
+        typeDiets: [...recipe.typeDiets, dietId],
+        dietsName: [...recipe.dietsName, dietName],
+      });
     }
-
-    validate({ ...form, [name]: value });
   };
 
-  const validate = (formData) => {
-    const nombreRegExp = /^[a-zA-Z\s'-]{3,15}$/;
-    const resumenRegExp = /^.{1,50}$/;
-    const numericRegExp = /^[0-9]*$/;
-    const indiceSaludRegExp = /^(10|[1-9])$/;
-    const pasosASeguirRegExp = /^.{1,50}$/;
-    const imageFileRegExp = /\.(jpg|jpeg|png|gif)$/i;
-    const dietTagsRegExp = /^[\w\s-]*$/;
-
-    const errorMessages = {
-      nombre: {
-        required: "El campo no puede estar vacío",
-        invalid: "Hay un error en el nombre",
-        maxLength: "Nombre demasiado largo",
-      },
-      resumen: {
-        required: "El campo no puede estar vacío",
-        invalid: "Hay un error en el resumen",
-        maxLength: "El resumen es muy extenso",
-      },
-      indiceSalud: {
-        required: "Complete el campo por favor",
-        invalid: "El índice saludable debe contener solo caracteres numéricos",
-        outOfRange: "El índice debe estar entre 1 y 10",
-      },
-      pasos: {
-        required: "El campo no puede estar vacío",
-        invalid: "Hay un error en los pasos a seguir",
-        maxLength: "El contenido debe ser breve",
-      },
-      imagen: {
-        required: "Debe seleccionar una imagen",
-        invalidFormat: "Formato de imagen no válido (jpg, jpeg, png o gif)",
-      },
-      dietas: {
-        invalid: "Etiquetas dietéticas inválidas",
-      },
-    };
-
-    const newErrors = {};
-
-    if (!nombreRegExp.test(formData.nombre)) {
-      newErrors.nombre = errorMessages.nombre.invalid;
-    } else if (formData.nombre === "") {
-      newErrors.nombre = errorMessages.nombre.required;
-    } else if (formData.nombre.length > 15) {
-      newErrors.nombre = errorMessages.nombre.maxLength;
-    }
-
-    if (!resumenRegExp.test(formData.resumen)) {
-      newErrors.resumen = errorMessages.resumen.invalid;
-    } else if (formData.resumen === "") {
-      newErrors.resumen = errorMessages.resumen.required;
-    } else if (formData.resumen.length > 50) {
-      newErrors.resumen = errorMessages.resumen.maxLength;
-    }
-
-    if (!numericRegExp.test(formData.indiceSalud)) {
-      newErrors.indiceSalud = errorMessages.indiceSalud.invalid;
-    } else if (!indiceSaludRegExp.test(formData.indiceSalud)) {
-      newErrors.indiceSalud = errorMessages.indiceSalud.required;
-    } else if (formData.indiceSalud < 1 || formData.indiceSalud > 10) {
-      newErrors.indiceSalud = errorMessages.indiceSalud.outOfRange;
-    }
-
-    if (!pasosASeguirRegExp.test(formData.pasos)) {
-      newErrors.pasos = errorMessages.pasos.invalid;
-    } else if (formData.pasos === "") {
-      newErrors.pasos = errorMessages.pasos.required;
-    } else if (formData.pasos.length > 50) {
-      newErrors.pasos = errorMessages.pasos.maxLength;
-    }
-
-    if (!formData.imagen) {
-      newErrors.imagen = errorMessages.imagen.required;
-    } else if (!imageFileRegExp.test(formData.imagen.name)) {
-      newErrors.imagen = errorMessages.imagen.invalidFormat;
-    }
-
-    if (!dietTagsRegExp.test(formData.dietas)) {
-      newErrors.dietas = errorMessages.dietas.invalid;
-    }
-
-    setErrors(newErrors);
+  const handleSteps = (event, index, field) => {
+    const newSteps = [...recipe.steps];
+    newSteps[index][field] = event.target.value;
+    setRecipe({
+      ...recipe,
+      steps: newSteps,
+    });
   };
 
-  const handleSubmit = (event) => {
+  const addStep = () => {
+    const newStepNumber = recipe.steps.length + 1;
+    setRecipe({
+      ...recipe,
+      steps: [...recipe.steps, { number: newStepNumber, step: "" }],
+    });
+  };
+
+  const removeStep = (index) => {
+    const newSteps = [...recipe.steps];
+    newSteps.splice(index, 1);
+    setRecipe({
+      ...recipe,
+      steps: newSteps,
+    });
+  };
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    validate(form);
-    // Si no hay errores, puedes continuar con el envío del formulario
-    // ...
+    dispatch(postRecipes(recipe));
+    setRecipe({
+      name: "",
+      summary: "",
+      healthScore: 0,
+      steps: [{ number: 1, step: "" }],
+      image: "",
+      typeDiets: [],
+      dietsName: [],
+    });
   };
-
 
   return (
-    <form onSubmit={handleSubmit} className={styles.recipeForm}>
-      <div>
-        <label>Nombre: </label>
-        <input
-          type="text"
-          value={form.nombre}
-          onChange={changeHandler}
-          name="nombre"
-        />
-        {errors.nombre && <span>{errors.nombre}</span>}
+    <div className={style.card} style={{background: "url(https://images.unsplash.com/photo-1648071588212-7acf9427f2a8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80)"}}>
+      <div className={style.cardHeader}>
+        <div className={style.textHeader}>Crea tu receta!</div>
       </div>
+      <div className={style.cardBody}>
+        <form onSubmit={handleSubmit}>
+          <div className={style.formGroup}>
+            <label htmlFor="name">Nombre de la receta: </label>
+            <input
+              onChange={handleChange}
+              type="text"
+              name="name"
+              value={recipe.name}
+            />
+            {errors.name && <p className={style.error}>{errors.name}</p>}
+          </div>
 
-      <div>
-        <label>Resumen: </label>
-        <input
-          type="text"
-          value={form.resumen}
-          onChange={changeHandler}
-          name="resumen"
-        />
-        {errors.resumen && <span>{errors.resumen}</span>}
+          <div className={style.formGroup}>
+            <label htmlFor="summary">Resumen de la receta: </label>
+            <textarea
+              onChange={handleChange}
+              type="text"
+              name="summary"
+              value={recipe.summary}
+            />
+            {errors.summary && <p className={style.error}>{errors.summary}</p>}
+          </div>
+
+          <div className={style.formGroup}>
+            <label htmlFor="healthScore">
+              Índice de salubilidad:{" "}
+              <b className={style.hsValue}>{recipe.healthScore}</b>{" "}
+            </label>
+            <input
+              className={style.range}
+              onChange={handleChange}
+              type="range"
+              name="healthScore"
+              value={recipe.healthScore}
+            />
+            {errors.healthScore && (
+              <p className={style.error}>{errors.healthScore}</p>
+            )}
+          </div>
+
+          <div className={style.formGroup}>
+            <label htmlFor="steps">Pasos a seguir: </label>
+            {recipe.steps.map((step, index) => (
+              <div key={index} className={style.stepContainer}>
+                <input
+                  type="text"
+                  onChange={(event) => handleSteps(event, index, "step")}
+                  value={step.step}
+                />
+                {index > 0 && (
+                  <button
+                    type="button"
+                    className={style.btn2}
+                    onClick={() => removeStep(index)}
+                  >
+                    Eliminar paso
+                  </button>
+                )}
+              </div>
+            ))}
+            <button
+              type="button"
+              className={style.btn2}
+              disabled={!recipe.steps[recipe.steps.length - 1].step}
+              onClick={addStep}
+            >
+              Añadir paso
+            </button>
+          </div>
+
+          <div className={style.formGroup}>
+            <label htmlFor="image">Imagen</label>
+            <input
+              onChange={handleChange}
+              type="text"
+              name="image"
+              value={recipe.image}
+              placeholder="image_default.jpg"
+            />
+            {errors.image && <p className={style.error}>{errors.image}</p>}
+          </div>
+
+          <div className={style.formGroup}>
+            <label htmlFor="Diets">Tipo de dieta</label>
+            <div className={style.formDiet}>
+              {allDiets?.map((diet) => (
+                <div key={diet.id} className={style.dietsC}>
+                  <label>{diet.name.toUpperCase()}</label>
+                  <input
+                    onChange={handleDiets}
+                    type="checkbox"
+                    name="typeDiets"
+                    value={diet.id}
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {(errors.name || errors.summary || errors.healthScore || errors.image) ? (
+            <p className={style.adv}>Complete todos los campos necesarios para crear la receta.</p>
+          ) : (
+            <button type="submit" className={style.btn}>Crear receta</button>
+          )}
+        </form>
       </div>
-
-      <div>
-        <label>Indice de salubilidad: </label>
-        <input
-          type="text"
-          value={form.indiceSalud}
-          onChange={changeHandler}
-          name="indiceSalud"
-        />
-        {errors.indiceSalud && <span>{errors.indiceSalud}</span>}
-      </div>
-
-      <div>
-        <label>Pasos a seguir: </label>
-        <input
-          type="text"
-          value={form.pasos}
-          onChange={changeHandler}
-          name="pasos"
-        />
-        {errors.pasos && <span>{errors.pasos}</span>}
-      </div>
-
-      <div>
-        <label>Imagen: </label>
-        <input
-          type="file"
-          accept=".jpg, .jpeg, .png, .gif"
-          onChange={changeHandler}
-          name="imagen"
-        />
-        {errors.imagen && <span>{errors.imagen}</span>}
-      </div>
-
-      <div>
-        <label>Etiquetas dietéticas: </label>
-        <input
-          type="text"
-          value={form.dietas}
-          onChange={changeHandler}
-          name="dietas"
-        />
-        {errors.dietas && <span>{errors.dietas}</span>}
-      </div>
-
-      <button type="submit">Enviar</button>
-    </form>
+    </div>
   );
 };
 
 export default CreateRecipe;
-
-

@@ -12,8 +12,7 @@ export const GET_BY_NAME = "GET_BY_NAME";
 export const getRecipeByName = (name) => {
     return async function (dispatch) {
         const {data} = await axios.get(`http://localhost:3001/recipes?name=${name}`)
-        console.log(data);
-        return dispatch({type: GET_BY_NAME, payload: data})
+        return dispatch({type: GET_BY_NAME, payload: data, stringSearch: name})
     }
 }
 
@@ -62,7 +61,7 @@ export const orderByName = (order) => {
 }
 
 export const ORDER_BY_HS = "ORDER_BY_HS";
-export const filterByHs = (order) => {
+export const orderByHs = (order) => {
     return {type: ORDER_BY_HS, payload: order}
 }
 
