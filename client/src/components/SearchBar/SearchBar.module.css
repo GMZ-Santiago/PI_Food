@@ -1,34 +1,34 @@
-/* SearchBar.module.css */
-
 .searchBarContainer {
   display: flex;
-  flex-direction: row;
   align-items: center;
-  margin-bottom: 20px; /* Espacio inferior para separar de otros elementos si es necesario */
+  background-color: #f0f0f0;
+  border-radius: 25px;
+  padding: 5px 10px;
 }
 
 .searchInput {
-  padding: 6px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  flex-grow: 1;
-  margin-right: 0px;
-  max-width: 185px; /* Ajusta el ancho máximo según tus preferencias */
+  border: none;
+  background-color: transparent;
+  padding: 10px;
+  width: 100%;
+  font-size: 16px;
 }
 
 .searchButton {
+  background-color: #f44336;
+  color: #fff;
   border: none;
-  background-color: transparent;
+  border-radius: 25px;
+  padding: 10px 15px;
+  margin-left: 10px;
   cursor: pointer;
-  outline: none;
-  transition: transform 0.2s ease-in-out; /* Agrega una transición suave al efecto */
+  transition: background-color 0.3s, color 0.3s;
 }
 
 .searchButton:hover {
-  transform: scale(1.1); /* Cambia el tamaño del botón en el hover */
+  background-color: #0056b3;
 }
 
-.searchIcon {
-  width: 34px; /* Ajusta el tamaño de la imagen según tus preferencias */
-  height: 34px; /* Ajusta el tamaño de la imagen según tus preferencias */
+.searchButton:focus {
+  outline: none;
 }

@@ -1,13 +1,9 @@
-/* Detail.module.css */
-
-/* Reset some default styling */
-* {
+*{
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-/* Main container */
 .bigContainer {
   display: flex;
   justify-content: center;
@@ -24,7 +20,6 @@
   overflow: hidden;
 }
 
-/* Close button */
 .closeBtnContainer {
   position: relative;
 }
@@ -57,7 +52,6 @@
   }
 }
 
-/* Main content */
 .main {
   position: relative;
   display: flex;
@@ -65,8 +59,6 @@
   padding: 20px;
 }
 
-
-/* Main content */
 .main {
   position: relative;
   display: flex;
@@ -74,7 +66,6 @@
   padding: 20px;
 }
 
-/* Title and Image block */
 .title {
   font-size: 1.8rem;
   margin-bottom: 10px;
@@ -88,7 +79,6 @@
   margin-bottom: 20px;
 }
 
-/* HealthScore block */
 .hScore {
   display: flex;
   align-items: center;
@@ -101,13 +91,11 @@
   margin-right: 5px;
 }
 
-/* Summary block */
 .summary {
   font-size: 1rem;
   margin-bottom: 20px;
 }
 
-/* Steps block */
 .subTitle {
   font-size: 1.2rem;
   margin-bottom: 10px;
@@ -122,19 +110,25 @@ li {
   margin-bottom: 10px;
 }
 
-/* Diets block */
 .dietsTags {
   display: flex;
   flex-wrap: wrap;
-  margin-bottom: 20px;
+  justify-content: center; 
+  align-items: center; 
+  margin-bottom: 30px;
 }
 
 .diet {
   background-color: #f44336;
   color: #ffffff;
-  padding: 5px 10px;
-  border-radius: 5px;
-  font-size: 0.8rem;
-  margin-right: 5px;
-  margin-bottom: 5px;
+  padding: 6px 14px; 
+  border-radius: 20px;
+  font-size: 0.9rem;
+  margin: 5px;
+  transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out, transform 0.2s; 
+}
+
+.diet:hover {
+  background-color: #e53935;
+  transform: scale(1.05);
 }

@@ -37,25 +37,27 @@ const getRecipeById = async (id) => {
     }
   };
 
-const formatRecipe = (recipe) => {
-  return {
-    id: recipe.id,
-    name: recipe.title,
-    image: recipe.image,
-    healthScore: recipe.healthScore,
-    summary: recipe.summary.replace(/(&nbsp;|<([^>]+)>)/gi, ""),
-    dietsName: recipe.diets,
-    steps: recipe.analyzedInstructions[0]?.steps.map((element) => {
-      return {
+  const formatRecipe = (recipe) => {
+    const steps = recipe.analyzedInstructions?.[0]?.steps || [];
+    
+    return {
+      id: recipe.id,
+      name: recipe.title,
+      image: recipe.image,
+      healthScore: recipe.healthScore,
+      summary: recipe.summary.replace(/(&nbsp;|<([^>]+)>)/gi, ""),
+      dietsName: recipe.diets,
+      steps: steps.map((element) => {
+        return {
           number: element.number,
           step: element.step
-      }
-  }),
-  vegetarian: recipe.vegetarian,
-  vegan: recipe.vegan,
-  glutenFree: recipe.glutenFree
+        };
+      }),
+      vegetarian: recipe.vegetarian,
+      vegan: recipe.vegan,
+      glutenFree: recipe.glutenFree
+    };
   };
-};
 
 const getAllRecipe = async () => {
   const infoDb = await Recipe.findAll({
@@ -91,6 +93,8 @@ const postRecipeController = async (req, res) => {
     const { name, image, summary, healthScore, steps, typeDiets, dietsName } =
       req.body;
 
+      console.log("Diet IDs:", typeDiets);
+
     if (
       !name ||
       !image ||
@@ -100,6 +104,7 @@ const postRecipeController = async (req, res) => {
       !typeDiets ||
       !dietsName
     ) {
+      console.log("Faltan campos obligatorios");
       throw new Error("Completar los campos obligatorios para la validación.");
     }
 
@@ -122,14 +127,18 @@ const postRecipeController = async (req, res) => {
     const resultRecipe = await Recipe.findByPk(newRecipe.id, {
       include: [Diets],
     });
+    console.log("Receta creada en la base de datos:", newRecipe.toJSON());
 
     res.status(200).json(formatRecipe(resultRecipe));
   } catch (error) {
     if (error.message === "No se encontraron dietas con las IDs proporcionadas") {
+      console.log("Error: No se encontraron dietas con las IDs proporcionadas");
       res.status(400).json({ error: error.message });
     } else if (error.message === "Completar los campos obligatorios para la validación.") {
+      console.log("Error: Campos obligatorios faltantes");
       res.status(404).json({ error: error.message });
     } else {
+      console.log("Error desconocido:", error);
       res
         .status(500)
         .json({ error: "Ha ocurrido un error al crear la receta" });

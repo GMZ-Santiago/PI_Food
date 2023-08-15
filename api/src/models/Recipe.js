@@ -34,7 +34,7 @@ module.exports = (sequelize) => {
           isValidate(value) {
             if (!Array.isArray(value) || value.length === 0) {
               throw new Error(
-                "Steps must be an array with at least one element"
+                "Los pasos deben ser un array con al menos un elemento"
               );
             }
           },

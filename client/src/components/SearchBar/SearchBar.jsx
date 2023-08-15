@@ -27,11 +27,7 @@ const SearchBar = () => {
         onChange={handleChange}
       />
       <button className={style.searchButton} onClick={handleSearch}>
-        <img
-          src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRztd-ZibFlJp72RLcg98OGBBFu6RcrGML2GQ&usqp=CAU"
-          alt="Buscar"
-          className={style.searchIcon}
-        />
+      🔍
       </button>
     </div>
   );

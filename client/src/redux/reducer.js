@@ -10,7 +10,6 @@ import {
   ORDER_BY_HS,
   NEXT_PAGE,
   PREV_PAGE,
-  // CHANGE_PAGE,
   HANDLE_PAGE,
   RESET_RECIPES,
   RESET_FILTERS,
@@ -113,15 +112,24 @@ const reducer = (state = initialState, actions) => {
     }
 
     case ORDER_BY_HS: {
-        const orderHS = [...state.recipes]
-        const orderA = orderHS.sort((a, b) => a.healthScore - b.healthScore)
-        const orderD = orderHS.sort((a, b) => b.healthScore - a.healthScore)
-        return {
-            ...state,
-            recipes: payload === "A" ? orderA : (payload === "D" ? orderD : orderHS),
-            orderHS: payload
+      const orderHS = [...state.recipes];
+      const sortedRecipes = orderHS.sort((a, b) => {
+        if (payload === "A") {
+          return b.healthScore - a.healthScore;
+        } else if (payload === "D") {
+          return a.healthScore - b.healthScore;
+        } else {
+          return 0; // No cambia el orden si el payload no es "A" ni "D"
         }
+      });
+    
+      return {
+        ...state,
+        recipes: sortedRecipes,
+        orderHS: payload,
+      };
     }
+    
 
     case NEXT_PAGE: {
       return {
@@ -136,12 +144,6 @@ const reducer = (state = initialState, actions) => {
         numPag: state.numPag - 1,
       };
     }
-    // case CHANGE_PAGE: {
-    //   return {
-    //     ...state,
-    //     numPag: payload
-    //   }
-    // }
 
     case HANDLE_PAGE: {
       return {

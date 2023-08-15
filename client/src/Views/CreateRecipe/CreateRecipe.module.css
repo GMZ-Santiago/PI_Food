@@ -91,7 +91,7 @@ select {
 }
 
 .dietsC {
-  flex: 50%; /* Mostrar dos tipos de dieta por fila */
+  flex: 50%;
   padding: 5px;
   box-sizing: border-box;
 }

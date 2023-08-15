@@ -1,16 +1,22 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllRecipes, getTypeDiets } from "../../redux/actions";
-import Filters from "../../components/Filters/Filters";
 import Card from "../../components/Card/Card";
 import Paginate from "../../components/Paginate/Paginate";
 import style from "./RecipeCards.module.css";
 
 const RecipeCards = () => {
   const dispatch = useDispatch();
-  const { allRecipes, recipes, allDiets, numPag } = useSelector(
-    (state) => state
-  );
+  const {
+    allRecipes,
+    recipes,
+    allDiets,
+    numPag,
+    filterDiet,
+    filterOrigin,
+    orderAlph,
+    orderHS,
+  } = useSelector((state) => state);
 
   useEffect(() => {
     if (allRecipes.length === 0) {
@@ -25,34 +31,61 @@ const RecipeCards = () => {
   const totalPages = Math.ceil(recipes.length / recipesPerPage);
   const start = (numPag - 1) * recipesPerPage;
   const end = start + recipesPerPage;
-  const viewRecipes = Array.isArray(recipes) ? recipes.slice(start, end) : [];
+
+  const filteredRecipes = recipes
+    .filter((recipe) => {
+      if (filterDiet !== "allDiets") {
+        return recipe.dietsName.includes(filterDiet);
+      }
+      return true;
+    })
+    .filter((recipe) => {
+      if (filterOrigin !== "All") {
+        return filterOrigin === "api" ? !isNaN(recipe.id) : isNaN(recipe.id);
+      }
+      return true;
+    });
+
+  const sortedRecipes = filteredRecipes
+    .sort((a, b) => {
+      if (orderAlph === "A") {
+        return a.name.localeCompare(b.name);
+      } else if (orderAlph === "D") {
+        return b.name.localeCompare(a.name);
+      }
+      return 0;
+    })
+    .sort((a, b) => {
+      if (orderHS === "A") {
+        return b.healthScore - a.healthScore;
+      } else if (orderHS === "D") {
+        return a.healthScore - b.healthScore;
+      }
+      return 0;
+    });
+
+  const viewRecipes = sortedRecipes.slice(start, end);
 
   return (
     <div>
-      <Filters allDiets={allDiets} />
-      {recipes.length !== 0 && (
-        <Paginate cantPages={totalPages} numPag={numPag} />
-      )}
+      {recipes.length !== 0 && <Paginate cantPages={totalPages} numPag={numPag} />}
       {recipes.length === 0 ? (
         <div className={style.loadContainer}>
           <span className={style.loader}></span>
         </div>
       ) : (
         <div className={style.container}>
-          {viewRecipes.map(({ id, name, image, dietsName, steps}) => (
+          {viewRecipes.map(({ id, name, image, dietsName, steps }) => (
             <Card
-              name={name} // Mostrar solo el título de la receta
               key={id}
               id={id}
+              name={name}
               image={image}
-              dietsName={dietsName} // Mostrar los tipos de dietas
-              steps={steps}//Mostrar las instrucciones
+              dietsName={dietsName}
+              steps={steps}
             />
           ))}
         </div>
-      )}
-      {recipes.length !== 0 && (
-        <Paginate cantPages={totalPages} numPag={numPag} />
       )}
     </div>
   );

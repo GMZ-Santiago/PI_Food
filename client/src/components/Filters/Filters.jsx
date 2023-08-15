@@ -30,8 +30,7 @@ const Filters = ({ allDiets }) => {
   };
 
   const handleHs = (event) => {
-    const hsFilterValue = event.target.value;
-    dispatch(orderByHs(hsFilterValue)); // Actualiza siempre el valor de orderByHs
+    dispatch(orderByHs(event.target.value));
     dispatch(handlePage(1));
   };
 
@@ -54,32 +53,32 @@ const Filters = ({ allDiets }) => {
     <div className={style.filters}>
       <div>
         <select onChange={handleOrder} value={orderAlph} className={style.classic}>
-          <FilterOption value="Default" text="Default" />
+          <FilterOption value="Default" text="Predeterminado" />
           <FilterOption value="A" text="A-Z" />
           <FilterOption value="D" text="Z-A" />
         </select>
 
         <select onChange={handleHs} value={orderHS} className={style.classic}>
-          <FilterOption value="M" text="Mixed HS" />
-          <FilterOption value="A" text="HS +" />
-          <FilterOption value="D" text="HS -" />
+          <FilterOption value="M" text="Salubilidad al azar" />
+          <FilterOption value="A" text="+ Salubilidad" />
+          <FilterOption value="D" text="- Salubilidad" />
         </select>
 
         <select onChange={handleDiets} value={filterDiet} className={style.classic}>
-          <FilterOption value="allDiets" text="All diets" />
+          <FilterOption value="allDiets" text="Todas las dietas" />
           {allDiets?.map((diet) => (
             <FilterOption key={diet.id} value={diet.name} text={diet.name} />
           ))}
         </select>
 
         <select onChange={handleOrigin} value={filterOrigin} className={style.classic}>
-          <FilterOption value="All" text="All origins" />
-          <FilterOption value="api" text="Api" />
-          <FilterOption value="db" text="DataBase" />
+          <FilterOption value="All" text="Todos los origenes" />
+          <FilterOption value="api" text="API" />
+          <FilterOption value="db" text="Base de Datos" />
         </select>
       </div>
       <button onClick={handleReset} className={style.btn}>
-        RESET FILTERS
+        LIMPIAR FILTROS
       </button>
     </div>
   );

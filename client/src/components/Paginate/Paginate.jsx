@@ -1,6 +1,6 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
-import { nextPag, prevPag } from '../../redux/actions'; // Asegúrate de importar las acciones correctas
+import { nextPag, prevPag } from '../../redux/actions';
 import style from './Paginate.module.css';
 
 const Paginate = ({ cantPages, numPag }) => {

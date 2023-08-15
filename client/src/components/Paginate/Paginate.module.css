@@ -37,11 +37,11 @@
   font-weight: bold;
   margin: 0 10px;
   padding: 10px; 
-  width: 36px; /* Fijamos un ancho para mantenerlo centrado */
+  width: 36px;
   display: flex;
   align-items: center;
   justify-content: center;
-  background-image: linear-gradient(to bottom, rgba(121, 121, 121, 0.6), rgba(255, 255, 255, 0.3)); /* Fondo difuminado */
+  background-image: linear-gradient(to bottom, rgba(121, 121, 121, 0.6), rgba(255, 255, 255, 0.3));
   transition: background-color 0.3s;
 }
 
@@ -49,10 +49,10 @@
   background-color: #007bff;
   color: #fff;
   border: 1px solid #007bff;
-  border-radius: 50%; /* Agregamos un radio para hacerlo circular */
-  padding: 10px; /* Aumentamos el espacio para resaltar */
-  width: 36px; /* Fijamos un ancho para mantenerlo centrado */
-  height: 36px; /* Igualamos el alto al ancho para mantenerlo circular */
+  border-radius: 50%;
+  padding: 10px;
+  width: 36px; 
+  height: 36px; 
   display: flex;
   align-items: center;
   justify-content: center;
