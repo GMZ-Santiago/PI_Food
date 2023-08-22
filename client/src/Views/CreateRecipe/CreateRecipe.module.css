@@ -62,7 +62,7 @@ select {
 .btn2 {
   margin-top: 5px;
   padding: 5px 10px;
-  background-color: #007bff;
+  background-color: #f44336;
   color: #fff;
   border: none;
   border-radius: 5px;
@@ -76,7 +76,7 @@ select {
 
 .btn {
   padding: 10px 20px;
-  background-color: #007bff;
+  background-color: #f44336;
   color: #fff;
   border: none;
   border-radius: 5px;

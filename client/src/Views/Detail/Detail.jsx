@@ -12,42 +12,37 @@ const Detail = () => {
 
   useEffect(() => {
     dispatch(getRecipeById(id));
-  
+
     return () => {
       dispatch(cleanDetail());
     };
   }, [dispatch, id]);
 
-  const stripHtmlTags = (html) => {
-    const tmp = document.createElement("DIV");
-    tmp.innerHTML = html;
-    return tmp.textContent || tmp.innerText || "";
-  };
+  console.log("Recipe Detail Steps:", recipeDetail?.steps);
 
   return (
     <div className={style.bigContainer}>
-  {Object.keys(recipeDetail).length === 0 ? (
-    <div className={style.loadContainer}>
-      <span className={style.loader}></span>
-    </div>
-  ) : (
-    <div className={style.container}>
-      <div className={style.main}>
-       
-        <div className={style.closeBtnContainer}>
-          <Link to={"/recipes"}>
-            <button className={style.closeBtn}>X</button>
-          </Link>
+      {Object.keys(recipeDetail).length === 0 ? (
+        <div className={style.loadContainer}>
+          <span className={style.loader}></span>
         </div>
-       
-        <div className={style.block}>
-          <img
-            className={style.image}
-            src={recipeDetail?.image}
-            alt={recipeDetail?.name}
-          />
-        </div>
-          
+      ) : (
+        <div className={style.container}>
+          <div className={style.main}>
+            <div className={style.closeBtnContainer}>
+              <Link to={"/recipes"}>
+                <button className={style.closeBtn}>X</button>
+              </Link>
+            </div>
+
+            <div className={style.block}>
+              <img
+                className={style.image}
+                src={recipeDetail?.image}
+                alt={recipeDetail?.name}
+              />
+            </div>
+
             <div className={style.block}>
               <div className={style.info}>
                 <div className={style.title}>
@@ -57,11 +52,11 @@ const Detail = () => {
                   <ins>Índice de Salubilidad:</ins>
                   <p>{recipeDetail?.healthScore}</p>
                 </div>
-              
-                <p>{stripHtmlTags(recipeDetail?.summary)}</p>
+
+                <p>{recipeDetail?.summary}</p>
               </div>
             </div>
-           
+
             <div className={style.block}>
               <div className={style.info}>
                 <h2 className={style.subTitle}>Paso a paso</h2>
@@ -72,13 +67,13 @@ const Detail = () => {
                 </ol>
               </div>
             </div>
-  
+
             <div className={style.block}>
               <h2 className={style.subTitle}>Tipos de dieta</h2>
               <div className={style.dietsTags}>
-                {recipeDetail?.TypeDiets?.map((diet) => (
-                  <div key={diet} className={style.diet}>
-                    {diet}
+                {recipeDetail?.dietsName?.map((diet, index) => (
+                  <div key={index} className={style.diet}>
+                    {diet.name || diet}
                   </div>
                 ))}
               </div>

@@ -1,11 +1,12 @@
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import style from "./CreateRecipe.module.css";
-import { useEffect, useState } from "react";
 import { getTypeDiets, postRecipes } from "../../redux/actions";
 import validations from "./validations";
 
 const CreateRecipe = () => {
   const dispatch = useDispatch();
+  const allDiets = useSelector((state) => state.allDiets);
 
   const [errors, setErrors] = useState({});
   const [recipe, setRecipe] = useState({
@@ -17,8 +18,6 @@ const CreateRecipe = () => {
     typeDiets: [],
     dietsName: [],
   });
-
-  const allDiets = useSelector((state) => state.allDiets);
 
   useEffect(() => {
     if (allDiets.length === 0) {
@@ -50,7 +49,9 @@ const CreateRecipe = () => {
 
     if (isDietChecked) {
       const updatedDietsId = recipe.typeDiets.filter((item) => item !== dietId);
-      const updatedDietsName = recipe.dietsName.filter((item) => item !== dietName);
+      const updatedDietsName = recipe.dietsName.filter(
+        (item) => item !== dietName
+      );
       setRecipe({
         ...recipe,
         typeDiets: updatedDietsId,
@@ -93,20 +94,35 @@ const CreateRecipe = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    dispatch(postRecipes(recipe));
-    setRecipe({
-      name: "",
-      summary: "",
-      healthScore: 0,
-      steps: [{ number: 1, step: "" }],
-      image: "",
-      typeDiets: [],
-      dietsName: [],
-    });
+
+    const validationErrors = validations(recipe);
+    setErrors(validationErrors);
+
+    if (Object.keys(validationErrors).length === 0) {
+      dispatch(postRecipes(recipe));
+      setRecipe({
+        name: "",
+        summary: "",
+        healthScore: 0,
+        steps: [{ number: 1, step: "" }],
+        image: "",
+        typeDiets: [],
+        dietsName: [],
+      });
+    }
   };
 
+  const isFormValid = !(
+    errors.name ||
+    errors.summary ||
+    errors.healthScore ||
+    errors.image ||
+    errors.typeDiets ||
+    (recipe.steps.some((step) => !step.step.trim()))
+  );
+
   return (
-    <div className={style.card} style={{background: "url(https://images.unsplash.com/photo-1648071588212-7acf9427f2a8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80)"}}>
+    <div className={style.card} style={{ /* ... */ }}>
       <div className={style.cardHeader}>
         <div className={style.textHeader}>Crea tu receta!</div>
       </div>
@@ -152,6 +168,7 @@ const CreateRecipe = () => {
           </div>
 
           <div className={style.formGroup}>
+            {errors.steps && <p className={style.error}>{errors.steps}</p>}
             <label htmlFor="steps">Pasos a seguir: </label>
             {recipe.steps.map((step, index) => (
               <div key={index} className={style.stepContainer}>
@@ -208,13 +225,24 @@ const CreateRecipe = () => {
                 </div>
               ))}
             </div>
+            {errors.typeDiets && (
+              <p className={style.error}>{errors.typeDiets}</p>
+            )}
           </div>
 
-          {(errors.name || errors.summary || errors.healthScore || errors.image) ? (
-            <p className={style.adv}>Complete todos los campos necesarios para crear la receta.</p>
-          ) : (
-            <button type="submit" className={style.btn}>Crear receta</button>
+          {Object.keys(errors).length > 0 && (
+            <p className={style.adv}>
+              Complete todos los campos necesarios para crear la receta.
+            </p>
           )}
+
+          <button
+            type="submit"
+            className={style.btn}
+            disabled={!isFormValid}
+          >
+            Crear receta
+          </button>
         </form>
       </div>
     </div>

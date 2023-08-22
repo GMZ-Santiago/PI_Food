@@ -1,5 +1,5 @@
 const {getRecipeById, getRecipeByName, getAllRecipe, postRecipeController} = require("../controllers/recipesControllers");
-// const {Food, Recipe, Diets} = require("../db");
+const {Food, Recipe, Diets} = require("../db");
 
 const getRecipeByIdHandler = async (req, res) => {
     const {idRecipe} = req.params

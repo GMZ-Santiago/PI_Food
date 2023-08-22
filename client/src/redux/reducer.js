@@ -64,6 +64,7 @@ const reducer = (state = initialState, actions) => {
     }
 
     case POST_RECIPE: {
+
       return {
         ...state,
         allRecipes: [...state.allRecipes, payload],

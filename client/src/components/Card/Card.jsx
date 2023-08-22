@@ -12,12 +12,11 @@ const Card = ({ id, name, image, dietsName }) => {
         <div className={styles.info}>
           <h2 className={styles.title}>{name}</h2>
           <div className={styles.diets}>
-            {Array.isArray(dietsName) &&
-              dietsName.map((diet, index) => (
-                <div key={index} className={styles.diet}>
-                  {diet}
-                </div>
-              ))}
+            {dietsName.map((diet, index) => (
+              <div key={index} className={styles.diet}>
+                {diet}
+              </div>
+            ))}
           </div>
         </div>
       </Link>
@@ -26,3 +25,8 @@ const Card = ({ id, name, image, dietsName }) => {
 };
 
 export default Card;
+
+
+
+
+
