@@ -1,3 +1,26 @@
+.loader {
+  display: inline-block;
+  width: 80px;
+  height: 80px;
+  border: 8px solid rgba(0, 0, 0, 0.3);
+  border-radius: 50%;
+  border-top: 8px solid #f44336;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.loadContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
 .container {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));

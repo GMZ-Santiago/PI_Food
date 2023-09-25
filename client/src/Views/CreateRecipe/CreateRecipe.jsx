@@ -112,17 +112,23 @@ const CreateRecipe = () => {
     }
   };
 
-  const isFormValid = !(
-    errors.name ||
-    errors.summary ||
-    errors.healthScore ||
-    errors.image ||
-    errors.typeDiets ||
-    (recipe.steps.some((step) => !step.step.trim()))
-  );
+  const isFormValid =
+    !errors.name &&
+    !errors.summary &&
+    !errors.healthScore &&
+    !errors.image &&
+    !errors.typeDiets &&
+    recipe.steps.every((step) => !!step.step.trim());
 
   return (
-    <div className={style.card} style={{ /* ... */ }}>
+    <div
+      className={style.card}
+      style={
+        {
+          /* ... */
+        }
+      }
+    >
       <div className={style.cardHeader}>
         <div className={style.textHeader}>Crea tu receta!</div>
       </div>
@@ -238,8 +244,7 @@ const CreateRecipe = () => {
 
           <button
             type="submit"
-            className={style.btn}
-            disabled={!isFormValid}
+            className={`${style.btn} ${isFormValid ? "" : style.btnDisabled}`}
           >
             Crear receta
           </button>
